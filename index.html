@@ -3,10 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Game</title>
+    <title>JavaScript Quiz</title>
+    <link rel="stylesheet" type="text/css" href="../javascript-quiz/assets/css/style.css">
 </head>
 <body>
-     <h1>Question Game</h1>
-     <script src="../javascript-quiz/assets/js/quiz.js"></script>
+    <div class="container">
+
+        <div id="startpage">
+            <h2>This quiz is designed to reinforce your knowledge on JavaScript</h2>
+        <button id="startbtn">Start Code Quiz</button>
+        <button id="startPageHighscore" onclick="showHighscore()">High Scores</button>
+        </div>
+
+        <div id="quiz">
+            <div id="timer">Time left: </div>
+                <div id="questions"></div>
+                    <button id="a" onclick="checkAnswer('a')"></button>
+                    <button id="b" onclick="checkAnswer('b')"></button>
+                    <button id="c" onclick="checkAnswer('c')"></button>
+                    <button id="d" onclick="checkAnswer('d')"></button>
+                <div id="result"></div>
+        </div>
+        <div id="gameover">
+
+            <div id="finalScore"></div>
+            <input type="text" size = "30" placeholder="What is your name" name="intials" id="initials"/>
+            <button id="submitScore">Submit!</button>
+        </div>
+        <div id=highscoreContainer>
+        <div id="high-scorePage">
+            <div id="highscore-header">
+                <h3>Player Name</h3>
+                <h3>Score</h3>
+            </div>
+            <div id = "highscore-initials"></div>
+            <div id = "highscore-score"></div>
+        </div>
+        <div id="endGameBtns">
+            <button id="playAgain" onclick="replayQuiz()">Run it Back!</button>
+            <button id="clearHighscore" onclick="clearScore()">Clear Highscores</button>
+        </div>
+    </div>
+    </div>
+    <script src="../javascript-quiz/assets/js/quiz.js"></script>
 </body>
 </html>

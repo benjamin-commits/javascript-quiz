@@ -1,33 +1,213 @@
-console.log("QUESTION TIME!")
+// defining html elements as a var
+var body = document.getElementById("quiz");
+var fsEl = document.getElementById("finalScore");
+var godiv = document.getElementById("gameover");
+var qEl = document.getElementById("questions");
+var qTimer = document.getElementById("timer");
+var startQuizButton = document.getElementById("startbtn");
+var startQuizDiv = document.getElementById("startpage");
+var highscoreContainer = document.getElementById("highscoreContainer");
+var highscoreDiv = document.getElementById("high-scorePage");
+var highscoreInputName = document.getElementById("initials");
+var highscoreDisplayName = document.getElementById("highscore-initials");
+var endGameBtns = document.getElementById("endGameBtns");
+var scoreBtn = document.getElementById("submitScore");
+var hiScore = document.getElementById("highscore-score");
+var choiceA = document.getElementById("a");
+var choiceB = document.getElementById("b");
+var choiceC = document.getElementById("c");
+var choiceD = document.getElementById("d");
 
-var questions = [
+// the quiz
+var quizQuestions = [
     {
-        question: "Is cheese good?",
-        answer: true
+
+        question: "Inside which HTML element do we put the JavaScript?",
+        choiceA: "script",
+        choiceB: "js",
+        choiceC: "javascript",
+        choiceD: "scripting",
+        correctAnswer: "a",
+    
     },
     {
-        question: "Are there 24 hours in a day?",
-        answer: true,
+        question: "What is Javascript?",
+        choiceA: "A coding language",
+        choiceB: "Coffee beans",
+        choiceC: "Not sure",
+        choiceD: "It's complicated",
+        correctAnswer: "a",
     },
-
+    
     {
-        question: "Are there 50 states in the United States of America?",
-        answer: true,                    
+        question: "Where is the correct place to insert a JavaScript?",
+        choiceA: "The head section",
+        choiceB: "The body section",
+        choiceC: "The html section",
+        choiceD: "Both the head section and the body section are correct",
+        correctAnswer: "d",                  
     },
-
+    
     {
-        question: "Is Rich Hosek the class instructor?",
-        answer: true,
+        question: "What is the correct syntax for referring to an external script called xxx.js?",
+        choiceA: "script href='xxx.js'",
+        choiceB: "script src='xxx.js'",
+        choiceC: "script name='xxx.js'",
+        choiceD: "#script-href='xxx.js'",
+        correctAnswer: "b",
     },
-]
-var correctAnswers = 0;
+    
+    {
+        question: "The external JavaScript file must contain the script tag",
+        choiceA: "False",
+        choiceB: "True",
+        choiceC: "Sometimes",
+        choiceD: "Never",
+        correctAnswer: "a",
+    },
+        
+    
+];
+// more var
+var finalQuestionIndex = quizQuestions.length;
+var currentQuestionIndex = 0;
+var timeLeft = 60;
+var timerInterval;
+var score = 0;
+var correct;
 
-for (i=0; i < questions.length; i++) {
-    var answer = confirm(questions[i].question);
-    if (answer == questions[i].answer) {
-        alert("Correct!");
-        correctAnswers++;
-    } else {
-        alert("Wrong!");
+// displays quiz questions
+function generateQuizQuestion(){
+    godiv.style.display = "none";
+    if (currentQuestionIndex === finalQuestionIndex){
+        return showScore();
+    } 
+    var currentQuestion = quizQuestions[currentQuestionIndex];
+    qEl.innerHTML = currentQuestion.question;
+    choiceA.innerHTML = currentQuestion.choiceA;
+    choiceB.innerHTML = currentQuestion.choiceB;
+    choiceC.innerHTML = currentQuestion.choiceC;
+    choiceD.innerHTML = currentQuestion.choiceD;
+};
+
+// function to start quiz
+function startQuiz(){
+    godiv.style.display = "none";
+    startQuizDiv.style.display = "none";
+    generateQuizQuestion();
+
+    //Timer
+    timerInterval = setInterval(function() {
+        timeLeft--;
+        qTimer.textContent = "Time left: " + timeLeft;
+    
+        if(timeLeft === 0) {
+          clearInterval(timerInterval);
+          showScore();
+        }
+      }, 1000);
+    body.style.display = "block";
+}
+// This function is the end page screen that displays your score after either completeing the quiz or upon timer run out
+function showScore(){
+    body.style.display = "none"
+    godiv.style.display = "flex";
+    clearInterval(timerInterval);
+    highscoreInputName.value = "";
+    fsEl.innerHTML = "You got " + score + " out of " + quizQuestions.length + " correct!";
+}
+
+// On click of the submit button, we run the function highscore that saves and stringifies the array of high scores already saved in local stoage
+// as well as pushing the new user name and score into the array we are saving in local storage. Then it runs the function to show high scores.
+scoreBtn.addEventListener("click", function highscore(){
+    
+    
+    if(highscoreInputName.value === "") {
+        alert("Please enter a valid name");
+        return false;
+    }else{
+        var savedHighscores = JSON.parse(localStorage.getItem("savedHighscores")) || [];
+        var currentUser = highscoreInputName.value.trim();
+        var currentHighscore = {
+            name : currentUser,
+            score : score
+        };
+    
+        godiv.style.display = "none";
+        highscoreContainer.style.display = "flex";
+        highscoreDiv.style.display = "block";
+        endGameBtns.style.display = "flex";
+        
+        savedHighscores.push(currentHighscore);
+        localStorage.setItem("savedHighscores", JSON.stringify(savedHighscores));
+        generateHighscores();
+
+    }
+    
+});
+
+// This function clears the list for the high scores and generates a new high score list from local storage
+function generateHighscores(){
+    highscoreDisplayName.innerHTML = "";
+    hiScore.innerHTML = "";
+    var highscores = JSON.parse(localStorage.getItem("savedHighscores")) || [];
+    for (i=0; i<highscores.length; i++){
+        var newNameSpan = document.createElement("li");
+        var newScoreSpan = document.createElement("li");
+        newNameSpan.textContent = highscores[i].name;
+        newScoreSpan.textContent = highscores[i].score;
+        highscoreDisplayName.appendChild(newNameSpan);
+        hiScore.appendChild(newScoreSpan);
     }
 }
+
+// This function displays the high scores page while hiding all of the other pages from 
+function showHighscore(){
+    startQuizDiv.style.display = "none"
+    godiv.style.display = "none";
+    highscoreContainer.style.display = "flex";
+    highscoreDiv.style.display = "block";
+    endGameBtns.style.display = "flex";
+
+    generateHighscores();
+}
+
+// This function clears the local storage of the high scores as well as clearing the text from the high score board
+function clearScore(){
+    window.localStorage.clear();
+    highscoreDisplayName.textContent = "";
+    hiScore.textContent = "";
+}
+
+// This function sets all the variables back to their original values and shows the home page to enable replay of the quiz
+function replayQuiz(){
+    highscoreContainer.style.display = "none";
+    godiv.style.display = "none";
+    startQuizDiv.style.display = "flex";
+    timeLeft = 76;
+    score = 0;
+    currentQuestionIndex = 0;
+}
+
+// This function checks the response to each answer 
+function checkAnswer(answer){
+    correct = quizQuestions[currentQuestionIndex].correctAnswer;
+
+    if (answer === correct && currentQuestionIndex !== finalQuestionIndex){
+        score++;
+        alert("That Is Correct!");
+        currentQuestionIndex++;
+        generateQuizQuestion();
+        //display in the results div that the answer is correct.
+    }else if (answer !== correct && currentQuestionIndex !== finalQuestionIndex){
+        alert("That Is Incorrect.")
+        currentQuestionIndex++;
+        generateQuizQuestion();
+        //display in the results div that the answer is wrong.
+    }else{
+        showScore();
+    }
+}
+
+// This button starts the quiz!
+startQuizButton.addEventListener("click",startQuiz);
