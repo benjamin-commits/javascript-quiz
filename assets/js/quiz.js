@@ -76,7 +76,7 @@ var timerInterval;
 var score = 0;
 var correct;
 
-// displays quiz questions
+// quiz questions
 function generateQuizQuestion(){
     godiv.style.display = "none";
     if (currentQuestionIndex === finalQuestionIndex){
@@ -90,7 +90,7 @@ function generateQuizQuestion(){
     choiceD.innerHTML = currentQuestion.choiceD;
 };
 
-// function to start quiz
+// start quiz
 function startQuiz(){
     godiv.style.display = "none";
     startQuizDiv.style.display = "none";
@@ -145,7 +145,7 @@ scoreBtn.addEventListener("click", function highscore(){
     
 });
 
-// This function clears the list for the high scores and generates a new high score list from local storage
+// scores
 function generateHighscores(){
     highscoreDisplayName.innerHTML = "";
     hiScore.innerHTML = "";
@@ -160,7 +160,7 @@ function generateHighscores(){
     }
 }
 
-// This function displays the high scores page while hiding all of the other pages from 
+// display scores
 function showHighscore(){
     startQuizDiv.style.display = "none"
     godiv.style.display = "none";
@@ -171,14 +171,14 @@ function showHighscore(){
     generateHighscores();
 }
 
-// This function clears the local storage of the high scores as well as clearing the text from the high score board
+// clean scores
 function clearScore(){
     window.localStorage.clear();
     highscoreDisplayName.textContent = "";
     hiScore.textContent = "";
 }
 
-// This function sets all the variables back to their original values and shows the home page to enable replay of the quiz
+// run it back!
 function replayQuiz(){
     highscoreContainer.style.display = "none";
     godiv.style.display = "none";
@@ -188,7 +188,7 @@ function replayQuiz(){
     currentQuestionIndex = 0;
 }
 
-// This function checks the response to each answer 
+// answer checker
 function checkAnswer(answer){
     correct = quizQuestions[currentQuestionIndex].correctAnswer;
 
@@ -197,16 +197,16 @@ function checkAnswer(answer){
         alert("That Is Correct!");
         currentQuestionIndex++;
         generateQuizQuestion();
-        //display in the results div that the answer is correct.
+        // correct answer
     }else if (answer !== correct && currentQuestionIndex !== finalQuestionIndex){
         alert("That Is Incorrect.")
         currentQuestionIndex++;
         generateQuizQuestion();
-        //display in the results div that the answer is wrong.
+        // wrong answer
     }else{
         showScore();
     }
 }
 
-// This button starts the quiz!
+// starts the quiz
 startQuizButton.addEventListener("click",startQuiz);
