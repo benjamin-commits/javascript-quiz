@@ -108,7 +108,7 @@ function startQuiz(){
       }, 1000);
     body.style.display = "block";
 }
-// This function is the end page screen that displays your score after either completeing the quiz or upon timer run out
+// show score once done
 function showScore(){
     body.style.display = "none"
     godiv.style.display = "flex";
@@ -117,8 +117,7 @@ function showScore(){
     fsEl.innerHTML = "You got " + score + " out of " + quizQuestions.length + " correct!";
 }
 
-// On click of the submit button, we run the function highscore that saves and stringifies the array of high scores already saved in local stoage
-// as well as pushing the new user name and score into the array we are saving in local storage. Then it runs the function to show high scores.
+
 scoreBtn.addEventListener("click", function highscore(){
     
     
